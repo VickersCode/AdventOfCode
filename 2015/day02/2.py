@@ -1,5 +1,5 @@
 # Grab the data from input2.txt
-file = open("./puzzleInputs/input2.txt", 'r')
+file = open("./2015/day02/input2.txt", 'r')
 data = file.readlines()
 file.close()
 
@@ -37,7 +37,7 @@ for presents in data:
     secondSmallestSide = min(dim_data)
 
     answer += (2 * smallestSide) + (2 * secondSmallestSide) + volume
-    print(answer)
+    
 
 print(answer)
 

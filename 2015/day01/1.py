@@ -1,7 +1,7 @@
 # PART 1
 
 # Grab the data from input1.txt
-file = open("./puzzleInputs/input1.txt", 'r')
+file = open("./2015/day01/input1.txt", 'r')
 data = file.read()
 file.close()
 
