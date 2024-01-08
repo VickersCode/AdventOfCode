@@ -1,65 +1,48 @@
+
+# Day 5 - Parts 1 and 2
 import re
-from collections import defaultdict
-
-with open('./2015/day03/input3.txt') as f:
-    data = f.read()
-
-# ------- PART ONE ------------
+ 
+nice_counter = 0
+improved_nice_counter = 0
+naughty_list = ['ab', 'cd', 'pq', 'xy']
+ 
+def nice_string(str):
+  if len(re.sub(r'[^aeiou]', '', str)) < 3:
+    return False
+ 
+  # Appear twice
+  if not re.search(r'(.)\1', str):
+    return False
+ 
+  # No naughty words
+  for nw in naughty_list:
+    if nw in str:
+      return False
+ 
+  return True
+ 
+def improved_nice_string(str):
+  # Check for double pair
+  if not re.search(r'(.)(.).*\1\2', str): #some wild boobies appear
+    return False
     
-gridList = ['0, 0']
-santa = [0, 0, 's']
-
-for x in range(len(data)):
-
-    mover = santa
-    if data[x] == '<':
-        mover = [mover[0] - 1, mover[1], mover[2]]
-    elif data[x] == '>':
-        mover = [mover[0] + 1, mover[1], mover[2]]
-    elif data[x] == '^':
-        mover = [mover[0], mover[1] + 1, mover[2]]
-    elif data[x] == 'v':
-        mover = [mover[0], mover[1] - 1, mover[2]]
-
-    if not str(mover[0]) + ',' + str(mover[1]) in gridList:
-        gridList.append(str(mover[0]) + ',' + str(mover[1]))
-
-    santa = mover
+  # letter repeat
+  if not re.search(r'(.).\1', str):
+    return False
     
-    answer = len(gridList) - 1
-
-print(answer)
-
-# --------- PART TWO ------------
-
-gridList = ['0, 0']
-santa = [0, 0, 's']
-roboSanta = [0, 0, 'r']
-
-for x in range(len(data)):
-
-    if x == 0 or x % 2 == 0:
-        mover = santa
-    else:
-        mover = roboSanta
-
-    if data[x] == '<':
-        mover = [mover[0] - 1, mover[1], mover[2]]
-    elif data[x] == '>':
-        mover = [mover[0] + 1, mover[1], mover[2]]
-    elif data[x] == '^':
-        mover = [mover[0], mover[1] + 1, mover[2]]
-    elif data[x] == 'v':
-        mover = [mover[0], mover[1] - 1, mover[2]]
-
-    if not str(mover[0]) + ',' + str(mover[1]) in gridList:
-        gridList.append(str(mover[0]) + ',' + str(mover[1]))
-
-    if x == 0 or x % 2 == 0:
-        santa = mover
-    else:
-        roboSanta = mover
-
-    answer = len(gridList) - 1
-
-print(answer)
+  return True
+      
+      
+with open('./2015/day05/input.txt') as f:
+  for line in f:
+    
+    if nice_string(line):
+      nice_counter += 1
+      
+    if improved_nice_string(line):
+      improved_nice_counter += 1
+ 
+ 
+# answer
+print("Total number of nice strings:", nice_counter)
+print("Improved total number of nice strings:", improved_nice_counter)
