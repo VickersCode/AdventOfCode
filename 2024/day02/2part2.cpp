@@ -6,43 +6,55 @@
 #include <cmath>
 #include <bits/stdc++.h>
 
-bool comp(int a, int b) {
-    return a > b;
-}
+bool checkLevel(const std::vector<int>& level);
+bool comp(int a, int b);
+
 
 int main() {
     int numSafe = 0;
     std::ifstream fin("2.txt");
     std::string line;
 
-    while (std::getline(fin, line)) {
-        std::istringstream iss(line);
-        std::vector<int> level;
-        int numRead;
+while (std::getline(fin, line)) {
+    std::istringstream iss(line);
+    std::vector<int> level;
+    int numRead;
 
-        while (iss >> numRead) {
-            level.push_back(numRead);
-        }        
+    while (iss >> numRead) {
+        level.push_back(numRead);
+    }        
 
-        bool wereGood = false;
-
-        for (int i = 0; i < level.size() - 1; i++) {
-            
-            int badLevels = 0;
-            if ((abs(level[i+1] - level[i]) <= 3 && abs(level[i+1] - level[i]) > 0) && ((is_sorted(level.begin(), level.end())) || (is_sorted(level.begin(), level.end(), comp)))) {
-                wereGood = true;
-            }
-            else {
-                wereGood = false;
+    if (checkLevel(level)) {
+        numSafe++;
+    } else {
+        bool canBeSafe = false;
+        for (int i = 0; i < level.size(); i++) {
+            std::vector<int> tempLevel = level;
+            tempLevel.erase(tempLevel.begin() + i);
+            if (checkLevel(tempLevel)) {
+                canBeSafe = true;
                 break;
             }
         }
-        if (wereGood) {
-            numSafe++;
-        }
+        if (canBeSafe) numSafe++;
     }
+}
 
     std::cout << numSafe << std::endl;
     return 0;
 }
 
+bool checkLevel(const std::vector<int>& level) {
+    if (level.size() < 2) return true;
+    bool increasing = level[1] > level[0];
+    for (int i = 1; i < level.size(); i++) {
+        int diff = level[i] - level[i-1];
+        if (increasing && (diff <= 0 || diff > 3)) return false;
+        if (!increasing && (diff >= 0 || diff < -3)) return false;
+    }
+    return true;
+}
+
+bool comp(int a, int b) {
+    return a > b;
+}
