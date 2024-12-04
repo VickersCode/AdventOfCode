@@ -5,14 +5,26 @@ answer = 0
 with open('./input.txt', 'r') as file:
     content = file.read()
 
-regex = r"((?:do|don't)[^()\n]*?)?mul\(\d+,\s*\d+\)"
+regex = r"don't|do|mul\(\d+,\s*\d+\)"
 
 goodCode = re.findall(regex, content)
 
-print(goodCode)
+
+enable = True
 for x in goodCode:
     print(x)
+    if x == "don't":
+        enable = False
+    if x == "do":
+        enable = True
+    if enable == False:
+        continue
     temp = re.findall("\d+", x)
-    multTemp = int(temp[0]) * int(temp[1])
-    answer += multTemp
+    if temp:
+        multTemp = int(temp[0]) * int(temp[1])
+        answer += multTemp
+        print("multiplied by:" + str(multTemp))
+
+
+print(answer)
 
